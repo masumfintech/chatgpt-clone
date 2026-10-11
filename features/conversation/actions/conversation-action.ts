@@ -12,6 +12,12 @@ export type ConversationListItem = {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export async function getConversation(conversationId: string){
+    const user = await requireUser();
+    return assertOwnsConversation(conversationId, user.id)
+}
+
 async function assertOwnsConversation(conversationId: string, userId: string) {
     const conversation = await prisma.conversation.findFirst({
         where: {
@@ -52,7 +58,7 @@ export async function createConversation(title = "New Chat") {
     });
 }
 
-export async function updateConversation(conversationId: string, data: {title: string, isPinned: boolean, isArchived: boolean}) {
+export async function updateConversation(conversationId: string, data: {title?: string, isPinned?: boolean, isArchived?: boolean}) {
     const user = await requireUser();
     await assertOwnsConversation(conversationId, user.id);
 

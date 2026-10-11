@@ -38,7 +38,7 @@ export function useCreateConversation() {
 export function useUpdateConversation() {
     const queryClient = useQueryClient();
 
-    return userMutation({
+    return useMutation({
         mutationFn: ({
                 id,
                 ...data
@@ -48,7 +48,7 @@ export function useUpdateConversation() {
                 isPinned?: boolean;
                 isArchived?: boolean;
             }) => updateConversation(id, data),
-            onSuccess: () => {
+            onSuccess: (conversation) => {
                 void queryClient.invalidateQueries({ queryKey: queryKeys.conversations.all });
                 void queryClient.invalidateQueries({ queryKey: queryKeys.conversations.detail(conversation.id) });
             },
